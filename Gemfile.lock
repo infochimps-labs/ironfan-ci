@@ -2,10 +2,13 @@ GEM
   remote: http://rubygems.org/
   specs:
     Platform (0.4.0)
+    addressable (2.2.6)
+    amqp (0.6.7)
+      eventmachine (>= 0.12.4)
     archive-tar-minitar (0.5.2)
     builder (3.0.0)
-    bunny (0.7.9)
-    chef (0.10.9)
+    bunny (0.6.0)
+    chef (0.10.8)
       bunny (>= 0.6.0)
       erubis
       highline
@@ -16,12 +19,43 @@ GEM
       mixlib-log (>= 1.3.0)
       mixlib-shellout (~> 1.0.0.rc)
       moneta
-      net-ssh (~> 2.2.2)
+      net-ssh (~> 2.2)
       net-ssh-multi (~> 1.1.0)
       ohai (>= 0.6.0)
       rest-client (>= 1.0.4, < 1.7.0)
       treetop (~> 1.4.9)
       uuidtools
+    chef-expander (0.10.8)
+      amqp (~> 0.6.7)
+      bunny (~> 0.6.0)
+      em-http-request (~> 0.2.11)
+      eventmachine (~> 0.12.10)
+      fast_xs (~> 0.7.3)
+      highline (~> 1.6.1)
+      mixlib-log (>= 1.2.0)
+      uuidtools (~> 2.1.1)
+      yajl-ruby (~> 0.7.7)
+    chef-server-api (0.10.8)
+      dep_selector (>= 0.0.3)
+      merb-assets (~> 1.1.0)
+      merb-core (~> 1.1.0)
+      merb-helpers (~> 1.1.0)
+      merb-param-protection (~> 1.1.0)
+      mixlib-authentication (>= 1.1.3)
+      thin
+      uuidtools (~> 2.1.1)
+    chef-server-webui (0.10.8)
+      coderay
+      haml
+      merb-assets (~> 1.1.0)
+      merb-core (~> 1.1.0)
+      merb-haml (~> 1.1.0)
+      merb-helpers (~> 1.1.0)
+      merb-param-protection (~> 1.1.0)
+      ruby-openid
+      thin
+    chef-solr (0.10.8)
+      chef (= 0.10.8)
     childprocess (0.3.1)
       ffi (~> 1.0.6)
     cluster_chef (3.0.12)
@@ -42,9 +76,17 @@ GEM
       gherkin (~> 2.7.1)
       json (>= 1.4.6)
       term-ansicolor (>= 1.0.6)
+    daemons (1.1.8)
+    dep_selector (0.0.8)
     diff-lcs (1.1.3)
+    em-http-request (0.2.15)
+      addressable (>= 2.0.0)
+      eventmachine (>= 0.12.9)
     erubis (2.7.0)
+    eventmachine (0.12.10)
     excon (0.9.5)
+    extlib (0.9.15)
+    fast_xs (0.7.3)
     ffi (1.0.11)
     fog (1.1.2)
       builder
@@ -56,6 +98,9 @@ GEM
       net-ssh (>= 2.1.3)
       nokogiri (~> 1.5.0)
       ruby-hmac
+    foreman (0.39.0)
+      term-ansicolor (~> 1.0.7)
+      thor (>= 0.13.6)
     formatador (0.2.1)
     gherkin (2.7.7)
       json (>= 1.4.6)
@@ -64,10 +109,27 @@ GEM
     grit (2.4.1)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
+    haml (3.1.4)
     highline (1.6.11)
     i18n (0.6.0)
     json (1.5.4)
     log4r (1.1.10)
+    merb-assets (1.1.3)
+      merb-core (~> 1.1.3)
+    merb-core (1.1.3)
+      bundler
+      erubis (>= 2.6.2)
+      extlib (>= 0.9.13)
+      mime-types (>= 1.16)
+      rack
+      rake
+    merb-haml (1.1.3)
+      haml (>= 2.0.3)
+      merb-core (~> 1.1.3)
+    merb-helpers (1.1.3)
+      merb-core (~> 1.1.3)
+    merb-param-protection (1.1.3)
+      merb-core (~> 1.1.3)
     method_source (0.7.0)
     mime-types (1.17.2)
     mixlib-authentication (1.1.4)
@@ -103,6 +165,7 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.7)
       slop (>= 2.4.4, < 3)
+    rack (1.4.1)
     rake (0.9.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -115,9 +178,14 @@ GEM
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.8.0)
     ruby-hmac (0.4.0)
+    ruby-openid (2.1.8)
     slop (2.4.4)
     systemu (2.2.0)
     term-ansicolor (1.0.7)
+    thin (1.3.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.14.6)
     treetop (1.4.10)
       polyglot
@@ -144,7 +212,7 @@ GEM
       virtualbox (>= 0.9.2)
     virtualbox (0.9.2)
       ffi (~> 1.0.9)
-    yajl-ruby (1.1.0)
+    yajl-ruby (0.7.9)
     yard (0.7.5)
 
 PLATFORMS
@@ -152,8 +220,13 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1)
-  chef (= 0.10.9)
+  chef (= 0.10.8)
+  chef-expander (= 0.10.8)
+  chef-server-api (= 0.10.8)
+  chef-server-webui (= 0.10.8)
+  chef-solr (= 0.10.8)
   cluster_chef (~> 3.0.12)
+  foreman
   grit
   pry
   rake
