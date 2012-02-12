@@ -11,13 +11,18 @@ namespace :install do
 
   desc "Install chef server on host machine"
   task :chef_server do
-    sh 'chef-solo -c config/solo.rb -j config/bootstrap-chef-server.json' 
+    sh 'chef-solo -c config/solo.rb -j config/bootstrap-chef-server.json -l info'
+    # sh 'sudo chown  -R chef /usr/local/var/{lib/couchdb,lib/rabbitmq,log/couchdb,log/rabbitmq,run/couchdb} /var/chef/solr '
+    # for foo in expander solr webui ; do echo $foo ; sudo ln -nfs server.rb  /etc/chef/$foo.rb ; done
+    sh 'sudo -u chef foreman start -f /etc/chef/Procfile-chef-backend' ; sleep 2
+    sh 'sudo -u chef foreman start -f /etc/chef/Procfile-chef-server'
+    # ps axu | egrep 'ruby|chef'
   end
 
-  desc "Set up host machine as a chef client"
-  task :chef_client do
-    sh 'chef-solo -c config/solo.rb -j config/bootstrap-chef-server.json' 
-  end
+  # desc "Set up host machine as a chef client"
+  # task :chef_client do
+  #   sh 'chef-solo -c config/solo.rb -j config/bootstrap-chef-server.json' 
+  # end
   
 end
 task :install => [
@@ -35,7 +40,7 @@ task :default do
 To use vagrant 0.9+, run
 
   gem install bundler
-  rake install USE_VAGRANT_09=true
+  rake install VAGRANT_VERSION=9
 
 Enjoy!
 }
