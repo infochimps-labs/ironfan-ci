@@ -1,0 +1,6 @@
+[submodule "vendor/cuken"]
+    path  = vendor/cuken
+    url   = https://github.com/infochimps/cuken.git
+[submodule "vendor/aruba"]
+    path  = vendor/aruba
+    url   = https://github.com/infochimps/aruba.git
