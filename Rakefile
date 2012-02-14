@@ -1,3 +1,7 @@
+require 'rubygems' unless defined?(Gem)
+require 'bundler'
+require 'rake'
+
 require 'chef'
 
 def IRONFAN_CI_DIR(*path) File.expand_path(File.join(*path), File.dirname(__FILE__)) end
@@ -12,6 +16,6 @@ CHEF_ORGANIZATION = ENV['CHEF_ORGANIZATION']
 CHEF_HOMEBASE     = ENV['CHEF_HOMEBASE']
 CHEF_USER         = ENV['CHEF_USER']
 
-Dir[IRONFAN_CI_DIR("tasks/*.rb")].each do |rakefile|
-  require(rakefile)
+Dir[IRONFAN_CI_DIR("tasks/*.rake")].each do |rakefile|
+  load(rakefile)
 end
