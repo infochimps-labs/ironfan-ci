@@ -16,6 +16,8 @@
   "run_list": [
     "recipe[homebrew]",
     "recipe[chef-server::rubygems-install]",
-    "recipe[chef-client::config]"
+    "recipe[chef-client::config]",
+    "role[mac_os_x]",
+    "role[workstation]"
   ]
 }

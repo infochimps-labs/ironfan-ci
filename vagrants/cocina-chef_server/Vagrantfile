@@ -6,6 +6,7 @@ Vagrant::Config.run do |config|
   # You shouldn't need to mess with anything but this section
 
   # cloud we're targeting
+  organization     = 'cocina'
   cluster          = 'cocina'
   facet            = 'chef_server'
   facet_index      = '1'
@@ -14,8 +15,8 @@ Vagrant::Config.run do |config|
   chef_server_url  = "http://localhost:4000"
   chef_environment = "dev"
   os_version       = "oneiric"
+  ram_mb           = 640
   #
-  homebase_on_vm_dir = "/cloud"
   homebase_on_host_dir = File.expand_path("../..", File.dirname(__FILE__))
 
   # ===========================================================================
@@ -24,7 +25,9 @@ Vagrant::Config.run do |config|
   #
 
   # Home for credentials and machine-specific setup
-  cluster_privates_dir = File.expand_path("knife/#{cluster}-credentials", homebase_on_host_dir)
+  credentials_dir = File.expand_path("knife/#{organization}-credentials", homebase_on_host_dir)
+  # Location that cookbooks, roles, etc will be mounted on vm
+  homebase_on_vm_dir = "/cloud"
 
   # box to build off of.
   config.vm.box = "cluster-chef-#{os_version}"
@@ -47,7 +50,7 @@ Vagrant::Config.run do |config|
 
   # Mount this to see all our chefs and stuff: [type, vm_path, host_path]
   config.vm.share_folder "homebase",  homebase_on_vm_dir, homebase_on_host_dir
-  config.vm.share_folder "etc-chef",  '/etc/chef',        File.join(cluster_privates_dir, "chef_server")
+  config.vm.share_folder "etc-chef",  '/etc/chef',        File.join(credentials_dir, "chef_server")
 
   # config.vm.customize do |vm|
   #   vm.name        = node_name
@@ -64,8 +67,8 @@ Vagrant::Config.run do |config|
   #
   config.vm.customize [
     "modifyvm", :id,
-    "--name",    node_name,
-    "--memory",  "640",
+    "--name",    node_name.to_s,
+    "--memory",  ram_mb.to_s,
     # Use the host resolver for DNS so that VPN continues to work within the VM
     "--natdnshostresolver1", "on",
   ]
@@ -88,8 +91,8 @@ Vagrant::Config.run do |config|
     when :chef_client
       chef.chef_server_url   = chef_server_url
       chef.validation_client_name = "#{cluster}-validator"
-      chef.validation_key_path = File.join(cluster_privates_dir, "#{cluster}-validator.pem")
-      # chef.client_key_path     = File.join(cluster_privates_dir, "client_keys", "client-#{node_name}.pem")
+      chef.validation_key_path = File.join(credentials_dir, "#{cluster}-validator.pem")
+      # chef.client_key_path     = File.join(credentials_dir, "client_keys", "client-#{node_name}.pem")
       chef.environment         = chef_environment
     when :chef_solo
       chef.provisioning_path = '/etc/chef'
