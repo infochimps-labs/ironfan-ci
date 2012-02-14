@@ -10,8 +10,11 @@ end
 
 def IRONFAN_CI_DIR(*segs) File.expand_path(File.join(*segs), File.expand_path("../..", File.dirname(__FILE__))) ; end
 
-$LOAD_PATH.unshift(IRONFAN_CI_DIR('vendor/hedgehog/cuken/lib'))
+$LOAD_PATH.unshift(IRONFAN_CI_DIR('vendor/cuken/lib'))
+$LOAD_PATH.unshift(IRONFAN_CI_DIR('vendor/aruba/lib'))
 
+require 'cuken'
+require 'aruba/cucumber'
 require 'rspec/expectations'
 
 # require 'webrat/adapters/mechanize'
@@ -19,5 +22,3 @@ require 'rspec/expectations'
 # World do
 #   Webrat::Session.new(Webrat::MechanizeAdapter.new)
 # end
-
-require 'cuken'

@@ -37,36 +37,40 @@ Feature: Ports
   # netstat -ant
 
   Scenario: Ports are open on the right interfaces, and not open on the wrong ones
+     When I examine all open ports
+     Then port 4040 should be open on all interfaces
+
     Given a port
       And a list of the interfaces on the machine
      Then the port is open on {explicit | all}
       And the port is closed on {the remainder}
 
-  Scenario: Component is performant, and performance is stable
-    Given a port
-     When I poke the port
-     Then its time of first connect should be X +/- x
-      And its time of total response should be Y +/- y
 
-  Scenario: Component shows evidence of correct behavior
-     When I {handle for command stored elsewhere}
-     Then I should get {
-
-     When I request its status
-     Then I should get confirmation the app is working
-      And the app should be in production mode # lookup table knows what to grep for
-     
-    Given a connection to the DB
-     When I store a string in the database
-      And I request that record 
-     Then I should get a successful response
-      And I should get the value I stored
-      And it should take less than X +/- x seconds
-
-  # https://github.com/auxesis/cucumber-nagios/blob/master/lib/cucumber/nagios/steps/http_steps.rb
-
-  Scenario: Port is a performant HTTP port
-    Given a component with http port 6789
-     When I request "/status"
-     Then I should see "I AM ALIVE"
-      And the request should succeed
+  # Scenario: Component is performant, and performance is stable
+  #   Given a port
+  #    When I poke the port
+  #    Then its time of first connect should be X +/- x
+  #     And its time of total response should be Y +/- y
+  # 
+  # Scenario: Component shows evidence of correct behavior
+  #    When I {handle for command stored elsewhere}
+  #    Then I should get {
+  # 
+  #    When I request its status
+  #    Then I should get confirmation the app is working
+  #     And the app should be in production mode # lookup table knows what to grep for
+  #    
+  #   Given a connection to the DB
+  #    When I store a string in the database
+  #     And I request that record 
+  #    Then I should get a successful response
+  #     And I should get the value I stored
+  #     And it should take less than X +/- x seconds
+  # 
+  # # https://github.com/auxesis/cucumber-nagios/blob/master/lib/cucumber/nagios/steps/http_steps.rb
+  # 
+  # Scenario: Port is a performant HTTP port
+  #   Given a component with http port 6789
+  #    When I request "/status"
+  #    Then I should see "I AM ALIVE"
+  #     And the request should succeed

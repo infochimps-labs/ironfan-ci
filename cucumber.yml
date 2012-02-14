@@ -1,6 +1,7 @@
 <% common = "--exclude data/ --strict -r features --tags ~@wip" %>
-default:     --format progress <%= common %>
-ok:          --format pretty   <%= common %>
+default:     --format pretty   <%= common %> --quiet
+dots:        --format progress <%= common %> --quiet
+pretty:      --format pretty   <%= common %>
 usage:       --format usage    <%= common %>
 wip:         --format pretty --exclude data/ --tags @wip --strict -r features
 
