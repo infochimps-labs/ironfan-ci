@@ -28,6 +28,14 @@ Feature: Ports
 
   # TODO: name interfaces: public, private, host, etc -- (provisioner responsibility)
 
+  # http://nc110.sourceforge.net/
+  # http://en.wikipedia.org/wiki/Netcat#Examples
+  # port scan: nc -v -w2 -z scanme.org 20-40
+  # To obtain a hex dump file of the data sent either way, use "-o logfile".  The dump lines begin with "<" or ">" to respectively indicate "from the net" or "to the net", and contain the total count per direction, and hex and ascii representations of the traffic.
+  # UDP connections are opened instead of TCP when -u is specified
+  # -w sets timeout
+  # netstat -ant
+
   Scenario: Ports are open on the right interfaces, and not open on the wrong ones
     Given a port
       And a list of the interfaces on the machine
@@ -54,3 +62,11 @@ Feature: Ports
      Then I should get a successful response
       And I should get the value I stored
       And it should take less than X +/- x seconds
+
+  # https://github.com/auxesis/cucumber-nagios/blob/master/lib/cucumber/nagios/steps/http_steps.rb
+
+  Scenario: Port is a performant HTTP port
+    Given a component with http port 6789
+     When I request "/status"
+     Then I should see "I AM ALIVE"
+      And the request should succeed

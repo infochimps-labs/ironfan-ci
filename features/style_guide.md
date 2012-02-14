@@ -6,6 +6,16 @@
 * Configuration details correct
 * 
 
+* If you can think of a way another cookbook might want to declare the same thing, it probably goes in the announcement.
+* If you can't describe the value to a user of what you're testing, it's probably an implementation detail. ("the file /foo/bar should exist" vs "the site's images directory should be populated").
+* You're verifying the machine is correct, not how it got there. Whether chef, a foolish-but-diligent intern, or magic space ponies set it up thusly, that's good enough for you.
+* for example, do not check if things are symlinks vs files, etc -- just that they're in the right place with the right contents
+* Do a minimum of OS metrics. You care that the components work correctly and are stable, not how many IOPS the disks are cranking out. If a sanity check of the disk's IOPS help you verify the app will be stable, then do so. However, Ironfan-CI complements and extends monitoring software -- collectd &c exist and are really good at what they do.
+
+
+* *components*:     Traditional feature and unit tests verify acceptance spefications for components.
+* *machine*:        Ironfan-CI verifies the acceptance specifications for your deployed machines.
+* *infrastructure*: Monitoring and Metrics are the acceptance specifications for your architecture.
 
 
 __________________________________________________________________________
@@ -34,7 +44,7 @@ __________________________________________________________________________
   - exists, with the right owner & permissions
   - on right volume(s)
 * exported file / jar / conf / lib
-  - exists, with the right owner & permissions
+  - exists, with the right owner & permissions.
   - ?version?
 * configuration:
   - need a standardized format for config values
@@ -54,27 +64,55 @@ __________________________________________________________________________
   - right branch, right sha
   - feature flags (?
 
+
 __________________________________________________________________________
 
 ### machine
 
 These are declared separately -- aspects of the machine should be decoupled from aspects of the components it runs
 
-* users -- should be only the
+* dns resolves
+
+* list of users and groups -- should be only the
   - base system users
   - users announced by components
   - organizations's users (tagged by machine)
+  - you can use ohai for this
+
+* list of running processes 
+  - base system processes
+  - daemons announced by components
+  - processes whitelisted as unimportant
+  
+* list of open ports
+  - base system ports, by interface
+  - ports announced by components
+  - ports owned by user ids that are whitelisted as using unpredictable/dynamically allocated ports
   
 * OS metrics
   - do not use ohai
   - do not go nuts with this. This complements and extends monitoring software; collectd exists
 
 * Chef preconditions
-  - eg 
   - helper to probe ohai
+  - good: the machine has a `[:cloud]` attribute. bad: the machine has an `[:ec2]` attribute
   
+* volumes  
+  - exist, with right owner and permissions, filesystem format
+  - right size (free / %free / total)
+  - balanced usage (eg a datanode isn't piling all its data on /mnt1 ignoring /mnt2)
+  - that it meets the declaration by the provisioner
+  - only these exist:
+    - system volumes
+    - volumes declared by provisioner
   
+### meta
 
+* run time
+* idempotent convergence
+* warnings
+* can pickle a chef output template -- 95% of it should be invariant after second run.
+  
 __________________________________________________________________________
 
 
@@ -88,6 +126,9 @@ Never write code in steps
 
 One action ('When' step) per feature.
 > f you want to put more than one When step, then you have a complex multi-step action that means something to the business. That flow should be captured by your domain model. Talk to the business users, decide on the name for that flow and specify it using a single step, which invokes the appropriate domain model procedure. Don't use feature files for scripting the flow.
+
+As a rule of thumb, anything that is literally specified should be in double quotes, otherwise it should be specified within the sentence. Imperative: I set the field labeled "First Name" to "John" / Declarative: I enter the details for user John
+
 
 ### Scenario
 
