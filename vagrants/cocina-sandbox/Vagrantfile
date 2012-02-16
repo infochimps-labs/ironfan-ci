@@ -44,7 +44,7 @@ Vagrant::Config.run do |config|
   # Mount this to see all our chefs and stuff: [type, vm_path, host_path]
   config.vm.share_folder "homebase",  homebase_on_vm_dir, homebase_on_host_dir
 
-  [0, 1].each do |facet_index|
+  [0].each do |facet_index|
 
     node_name        = "#{cluster}-#{facet}-#{facet_index}"
 
@@ -92,6 +92,8 @@ Vagrant::Config.run do |config|
         #
         chef.add_recipe     'cloud_utils::virtualbox_metadata'
         chef.add_role       :package_set
+        chef.add_recipe     'chef-client::config'
+        chef.add_recipe     'chef-client::service'
         #
 
         chef.json = {
