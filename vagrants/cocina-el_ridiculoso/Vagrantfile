@@ -20,7 +20,7 @@ Vagrant::Config.run do |config|
   #
 
   # box to build off of.
-  config.vm.box = "cluster-chef-natty"
+  config.vm.box = "ironfan-natty"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
@@ -151,8 +151,8 @@ Vagrant::Config.run do |config|
           ["/home/#{ENV['USER']}", { "owner" => ENV['USER'], "remote_path" => ENV['HOME'] } ],
         ] },
       "package_set" => {
-        "install"       => [ "base", "dev", "sysadmin", "text", "vagrant", "cluster_chef" ],
-        "gems"          => { "cluster_chef" => %w[ cluster_chef ] }
+        "install"       => [ "base", "dev", "sysadmin", "text", "vagrant", "ironfan" ],
+        "gems"          => { "ironfan" => %w[ ironfan ] }
       },
       "tuning"          => { "swappiness" => "60", "overcommit_memory" => "1", "overcommit_ratio" => "100" },
       "java"            => { "install_flavor" =>"sun" },

@@ -1,6 +1,6 @@
 
 # This is the ubuntu natty VM postinstall.sh script from infochimps'
-# cluster_chef. It is based on Mitchell's official lucid32/64 baseboxes
+# ironfan. It is based on Mitchell's official lucid32/64 baseboxes
 # postinstall.sh script, with the following important differences:
 #
 # * installs ruby 1.9.2 (not 1.8.7) from source

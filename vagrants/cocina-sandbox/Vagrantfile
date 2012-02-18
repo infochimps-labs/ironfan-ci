@@ -49,7 +49,7 @@ Vagrant::Config.run do |config|
     node_name        = "#{cluster}-#{facet}-#{facet_index}"
 
     config.vm.define node_name.to_sym do |cfg|
-      cfg.vm.box = "cluster-chef-#{os_version}"
+      cfg.vm.box = "ironfan-#{os_version}"
       cfg.vm.network  :hostonly, ip_for(organization, cluster, facet, facet_index)
 
       #

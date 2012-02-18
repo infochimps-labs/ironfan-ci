@@ -57,13 +57,13 @@ GEM
       chef (= 0.10.8)
     childprocess (0.3.1)
       ffi (~> 1.0.6)
-    cluster_chef (3.0.12)
+    ironfan (3.0.12)
       chef (~> 0.10.4)
-      cluster_chef-knife (= 3.0.12)
+      ironfan-knife (= 3.0.12)
       fog (~> 1.1.1)
       formatador (~> 0.2.1)
       gorillib (~> 0.1.7)
-    cluster_chef-knife (3.0.12)
+    ironfan-knife (3.0.12)
       chef (~> 0.10.4)
       fog (~> 1.1.1)
       formatador (~> 0.2.1)
@@ -245,7 +245,7 @@ DEPENDENCIES
   chef-server-api (= 0.10.8)
   chef-server-webui (= 0.10.8)
   chef-solr (= 0.10.8)
-  cluster_chef (~> 3.0.12)
+  ironfan (~> 3.0.12)
   cucumber
   foreman
   grit

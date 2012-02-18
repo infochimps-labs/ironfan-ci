@@ -30,7 +30,7 @@ Vagrant::Config.run do |config|
   homebase_on_vm_dir = "/cloud"
 
   # box to build off of.
-  config.vm.box = "cluster-chef-#{os_version}"
+  config.vm.box = "ironfan-#{os_version}"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
@@ -141,8 +141,8 @@ Vagrant::Config.run do |config|
           ["/home/#{ENV['USER']}", { "owner" => ENV['USER'], "remote_path" => ENV['HOME'] } ],
         ] },
       "package_set" => {
-        "install"       => [ "base", "dev", "sysadmin", "text", "vagrant", "cluster_chef", "xml" ],
-        "gems"          => { "cluster_chef" => %w[ cluster_chef ] }
+        "install"       => [ "base", "dev", "sysadmin", "text", "vagrant", "ironfan", "xml" ],
+        "gems"          => { "ironfan" => %w[ ironfan ] }
       },
       "tuning"          => { "swappiness" => "60", "overcommit_memory" => "1", "overcommit_ratio" => "100" },
       "java"            => { "install_flavor" =>"sun" },

@@ -11,7 +11,7 @@ end
 #
 
 gem 'chef',          chef_version
-gem 'cluster_chef',  "~> 3.0.12"
+gem 'ironfan',  "~> 3.0.12"
 
 if vagrant_version == "9"
   gem 'vagrant',    "~> 0.9.7"

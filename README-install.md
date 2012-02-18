@@ -1,10 +1,10 @@
 
-### Install cluster_chef-homebase
+### Install ironfan-homebase
 
 Clone this repo, producing the directory we'll call `homebase` from now on. In fact, you may wish to rename it:
 
-        git clone https://github.com/infochimps-labs/cluster_chef-homebase
-        mv cluster_chef-homebase homebase
+        git clone https://github.com/infochimps-labs/ironfan-homebase
+        mv ironfan-homebase homebase
         cd homebase
         git submodule update --init
 
@@ -36,7 +36,7 @@ Download and install Virtualbox 4.x -- visit http://download.virtualbox.org/virt
 
 Run bundle install from your homebase directory
 
-        $ cd cluster_chef_homebase
+        $ cd ironfan_homebase
         $ bundle install
 
 You should now be able to list all templates:
@@ -54,8 +54,8 @@ You should now be able to list all templates:
 
 Now move into the vagrants/ subdirectory and run
 
-        $ cd cluster_chef_homebase/vagrants
-        $ vagrant basebox build 'cluster-chef-natty'
+        $ cd ironfan_homebase/vagrants
+        $ vagrant basebox build 'ironfan-natty'
 
 If you don't have the iso file it will download it for you. The ISO file is huge, and will probably take about 30 minutes to pull in.
 
@@ -70,16 +70,16 @@ The `basebox build` command will
 * Wait for ssh login to work with :ssh_user , :ssh_password
 * Sudo execute the :postinstall_files
 
-Next, export the vm to a .box file (producing `cluster-chef-natty.box`)
+Next, export the vm to a .box file (producing `ironfan-natty.box`)
 
-        $ vagrant basebox export cluster-chef-natty
-        $ mv cluster-chef-natty.box boxes/cluster-chef-natty.box
+        $ vagrant basebox export ironfan-natty
+        $ mv ironfan-natty.box boxes/ironfan-natty.box
 
 ### Add the box as one of your boxes
 
 Import the box into vagrant:
 
-        $ vagrant box add 'cluster-chef-natty' 'boxes/cluster-chef-natty.box'
+        $ vagrant box add 'ironfan-natty' 'boxes/ironfan-natty.box'
 
 __________________________________________________________________________
 
@@ -117,15 +117,15 @@ __________________________________________________________________________
         knife environment from file environments/prod.rb
         knife environment from file environments/dev.rb
 
-* go to cluster_chef_homebase/knife and make a copy of the credentials directory for the cocina world
+* go to ironfan_homebase/knife and make a copy of the credentials directory for the cocina world
 
-        cd cluster_chef_homebase/knife 
+        cd ironfan_homebase/knife 
         cp -rp example cocina
         cd cocina
         git init ; git add .
         git commit -m "New credentials univers for local VM chef server" .
     
-  subdirectories of `cluster_chef_homebase/knife` are .gitignored; don't check this directory into git.
+  subdirectories of `ironfan_homebase/knife` are .gitignored; don't check this directory into git.
 
 * upload your cookbooks!
 
