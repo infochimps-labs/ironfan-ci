@@ -1,56 +1,46 @@
 Vagrant::Config.run do |config|
-  # ===========================================================================
-  #
-  # Node Identity
-  #
-  # You shouldn't need to mess with anything but this section
 
-  HOST_NETWORK_BLK = {
-    :testing => "33.33.33"
-  }
+  #
+  # FIXME: these need to go somewhere else; need to learn more abt vagrant to
+  # figure out where.
+  #
 
-  def ip_for(organization, cluster, facet, facet_index)
-    "#{HOST_NETWORK_BLK[organization]}.#{30 + facet_index}"
+  Chef::Config.host_network_blk ||= '33.33.33'
+
+  def ip_for(svr)
+    "#{Chef::Config.host_network_blk}.#{30 + svr.facet_index}"
   end
 
-  def host_ip(organization)
-    "#{HOST_NETWORK_BLK[organization]}.1"
-  end
+  # Location that cookbooks, roles, etc will be mounted on vm
+  homebase_on_vm_dir = "/cloud"
 
-  # cloud we're targeting
-  organization     = :testing
-  cluster          = 'sandbox'
-  facet            = 'simple'
-  chef_server_url  = "http://#{host_ip(organization)}:4000"
-  chef_environment = "dev"
-  os_version       = "natty"
+  # FIXME: things like this should be imputed by the `cloud` statement
   ram_mb           = 640
-  #
-  homebase_on_host_dir = File.expand_path("../../../homebase", File.dirname(__FILE__))
 
   # ===========================================================================
   #
   # Configure VM
   #
 
-  # Home for credentials and machine-specific setup
-  credentials_dir = File.expand_path("knife/#{organization}-credentials", homebase_on_host_dir)
-  # Location that cookbooks, roles, etc will be mounted on vm
-  homebase_on_vm_dir = "/cloud"
-
   # Boot with a GUI so you can see the screen. (Default is headless)
   config.vm.boot_mode = :gui
 
   # Mount this to see all our chefs and stuff: [type, vm_path, host_path]
-  config.vm.share_folder "homebase",  homebase_on_vm_dir, homebase_on_host_dir
+  config.vm.share_folder "homebase",  homebase_on_vm_dir, Chef::Config.homebase
 
-  [0].each do |facet_index|
+  #
+  # Define a VM for all the targeted servers in the cluster.
+  #
+  # * vm name   - server's fullname ('el_ridiculoso-grande-2')
+  # * vm box    - cloud.image_name
+  # * creates host network on the subnet defined in Chef::Config[:host_network_blk]
+  # * populates chef provisioner from the server's run_list
+  #
+  $ironfan_target.servers.each do |svr|
+    config.vm.define svr.fullname.to_sym do |cfg|
 
-    node_name        = "#{cluster}-#{facet}-#{facet_index}"
-
-    config.vm.define node_name.to_sym do |cfg|
-      cfg.vm.box = "ironfan-#{os_version}"
-      cfg.vm.network  :hostonly, ip_for(organization, cluster, facet, facet_index)
+      cfg.vm.box     = svr.cloud.image_name
+      cfg.vm.network  :hostonly, ip_for(svr)
 
       #
       # See http://www.virtualbox.org/manual/ch08.html#idp12418752
@@ -58,7 +48,7 @@ Vagrant::Config.run do |config|
       #
       cfg.vm.customize [
         "modifyvm", :id,
-        "--name",    node_name.to_s,
+        "--name",    svr.fullname.to_s,
         "--memory",  ram_mb.to_s,
         # Use the host resolver for DNS so that VPN continues to work within the VM
         "--natdnshostresolver1", "on",
@@ -73,44 +63,26 @@ Vagrant::Config.run do |config|
       # computers to access the VM, whereas host only networking does not.
       # cfg.vm.forward_port 80, 8080
 
-      cfg.vm.provision :chef_client do |chef|
+      cfg.vm.provision Vagrant::Provisioners::IronfanChefClient do |chef|
         #
-        chef.node_name         = node_name
+        chef.node_name              = svr.fullname
 
-        chef.chef_server_url   = chef_server_url
-        chef.validation_client_name = "#{organization}-validator"
-        # chef.client_key_path     = File.join(credentials_dir, "client_keys", "client-#{node_name}.pem")
-        chef.client_key_path     = File.join(homebase_on_vm_dir, "knife/#{organization}-credentials/client_keys", "client-#{node_name}.pem")
-        chef.validation_key_path = File.join(credentials_dir, "#{organization}-validator.pem")
+        chef.chef_server_url        = svr.chef_server_url
+        chef.validation_client_name = svr.validation_client_name
+        chef.validation_key_path    = svr.validation_key
+        chef.upload_client_key      = svr.client_key.filename if svr.client_key
 
-        chef.environment         = chef_environment
-        #
-        chef.add_role       :systemwide
-        chef.add_role       :chef_client
-        chef.add_role       :ssh
-        # chef.add_role     :nfs_client
-        #
-        chef.add_recipe     'cloud_utils::virtualbox_metadata'
-        chef.add_role       :package_set
-        chef.add_recipe     'chef-client::config'
-        chef.add_recipe     'chef-client::service'
-        #
+        chef.environment            = svr.environment
+        chef.json                   = svr.cloud.user_data
 
-        chef.json = {
-          "organization"    => organization,
-          "cluster_name"    => cluster,
-          "facet_name"      => facet,
-          "facet_index"     => facet_index,
-          #
-          "nfs" => { "mounts" => [
-              ["/home/#{ENV['USER']}", { "owner" => ENV['USER'], "remote_path" => ENV['HOME'] } ],
-            ] },
-          "tuning"          => { "swappiness" => "60", "overcommit_memory" => "1", "overcommit_ratio" => "100" },
-          "java"            => { "install_flavor" =>"sun" },
-          "volumes" => {
-            "root"          => { "tags" => { "scratch" => true }, "mount_point" => "/", "device" => "/dev/mapper/cluster--chef--natty-root", "mountable" => false }
-          }
-        }
+        svr.combined_run_list.each do |run_list_entry|
+          case run_list_entry
+          when /^role\[(\w+)\]$/   then chef.add_role($1)                # role[foo]
+          when /^recipe\[(\w+)\]$/ then chef.add_recipe($1)              # recipe[foo]
+          else                          chef.add_recipe(run_list_entry)  # foo
+          end
+        end
+
       end
     end
   end

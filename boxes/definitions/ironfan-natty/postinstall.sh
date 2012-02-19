@@ -20,9 +20,6 @@ cd /tmp/knife-bootstrap
 eval `cat /etc/lsb-release `
 export DEBIAN_FRONTEND=noninteractive
 
-date > /etc/vagrant_box_build_time
-date > /etc/box_build_time
-
 echo -e "`date` \n\n**** \n**** apt update:\n****\n"
 apt-get -y update
 apt-get -y upgrade
@@ -117,14 +114,14 @@ apt-get -y autoremove
 # make locate work good
 updatedb
 
-# Zero out the free space to save space in the final image:
-echo "Ignore the harmless 'no space left on device' error"
+# Ignore the harmless 'no space left on device' error
+echo "Zero out the free space to save space in the final image:"
 ( dd if=/dev/zero of=/EMPTY bs=1M 2>/dev/null ) || true
 rm -f /EMPTY
 
 # Removing leftover leases and persistent rules
 echo "cleaning up dhcp leases"
-rm /var/lib/dhcp3/*
+rm /var/lib/dhcp*/*
 
 # Make sure Udev doesn't block our network
 # http://6.ptmc.org/?p=164
@@ -136,6 +133,9 @@ rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
 echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
 echo "pre-up sleep 2" >> /etc/network/interfaces
+
+date > /etc/vagrant_box_build_time
+echo -e "BUILD_DATE='`date`'\nBUILD_STRING='built by ironfan'\nVBOX_VERSION='$VBOX_VERSION'\nRUBY_VERSION='$RUBY_VERSION'\nCHEF_VERSION='$CHEF_VERSION'" > /etc/ironfan-bootstrap.txt
 
 echo -e "`date` \n\n**** \n**** Cluster Chef client bootstrap complete\n****\n"
 exit

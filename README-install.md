@@ -73,13 +73,12 @@ The `basebox build` command will
 Next, export the vm to a .box file (producing `ironfan-natty.box`)
 
         $ vagrant basebox export ironfan-natty
-        $ mv ironfan-natty.box boxes/ironfan-natty.box
 
 ### Add the box as one of your boxes
 
 Import the box into vagrant:
 
-        $ vagrant box add 'ironfan-natty' 'boxes/ironfan-natty.box'
+        $ vagrant box add 'ironfan-natty' ironfan-natty.box
 
 __________________________________________________________________________
 
@@ -87,12 +86,7 @@ __________________________________________________________________________
 
 To use it:
 
-        $ cd vagrants/cocina-chef_server
-        $ vagrant up
-        $ vagrant ssh
-    
-FIXME: this will break; it's trying to look in cloud/cookbooks/cookbooks
-  for cookbooks. ssh in, edit the /etc/chef/solo.rb file, and run chef-client by hand
+    knife cluster vm sandbox-simple --vagrant up
 
 __________________________________________________________________________
 

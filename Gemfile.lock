@@ -2,7 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     Platform (0.4.0)
-    addressable (2.2.6)
+    addressable (2.2.7)
     amqp (0.6.7)
       eventmachine (>= 0.12.4)
     archive-tar-minitar (0.5.2)
@@ -18,7 +18,7 @@ GEM
       mixlib-config (>= 1.1.2)
       mixlib-log (>= 1.3.0)
       moneta
-      net-ssh (~> 2.2)
+      net-ssh (~> 2.1)
       net-ssh-multi (~> 1.1.0)
       ohai (>= 0.6.0)
       rest-client (>= 1.0.4, < 1.7.0)
@@ -57,22 +57,11 @@ GEM
       chef (= 0.10.8)
     childprocess (0.3.1)
       ffi (~> 1.0.6)
-    ironfan (3.0.12)
-      chef (~> 0.10.4)
-      ironfan-knife (= 3.0.12)
-      fog (~> 1.1.1)
-      formatador (~> 0.2.1)
-      gorillib (~> 0.1.7)
-    ironfan-knife (3.0.12)
-      chef (~> 0.10.4)
-      fog (~> 1.1.1)
-      formatador (~> 0.2.1)
-      gorillib (~> 0.1.7)
     coderay (1.0.5)
-    cucumber (1.1.4)
+    cucumber (1.1.5)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.2)
-      gherkin (~> 2.7.1)
+      gherkin (~> 2.8.0)
       json (>= 1.4.6)
       term-ansicolor (>= 1.0.6)
     daemons (1.1.8)
@@ -101,7 +90,7 @@ GEM
       term-ansicolor (~> 1.0.7)
       thor (>= 0.13.6)
     formatador (0.2.1)
-    gherkin (2.7.7)
+    gherkin (2.8.0)
       json (>= 1.4.6)
     git (1.2.5)
     gorillib (0.1.8)
@@ -124,6 +113,11 @@ GEM
     haml (3.1.4)
     highline (1.6.11)
     i18n (0.6.0)
+    ironfan (3.1.0.rc1)
+      chef (~> 0.10.4)
+      fog (~> 1.1.1)
+      formatador (~> 0.2.1)
+      gorillib (~> 0.1.7)
     jeweler (1.8.3)
       bundler (~> 1.0)
       git (>= 1.2.5)
@@ -245,7 +239,6 @@ DEPENDENCIES
   chef-server-api (= 0.10.8)
   chef-server-webui (= 0.10.8)
   chef-solr (= 0.10.8)
-  ironfan (~> 3.0.12)
   cucumber
   foreman
   grit
@@ -253,6 +246,7 @@ DEPENDENCIES
   guard-chef
   guard-cucumber
   guard-process
+  ironfan (= 3.1.0.rc1)
   jeweler
   pry
   rake
