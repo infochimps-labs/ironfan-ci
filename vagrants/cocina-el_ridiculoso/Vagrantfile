@@ -77,11 +77,11 @@ Vagrant::Config.run do |config|
 
     chef.add_role         :hadoop
     chef.add_role         :hadoop_s3_keys
-    chef.add_recipe       'hadoop_cluster::cluster_conf'
+    chef.add_recipe       'hadoop_cluster::config_files'
     chef.add_role         :tuning
     chef.add_role         :cassandra_server
-    chef.add_role         :elasticsearch_data_esnode
-    chef.add_role         :elasticsearch_http_esnode
+    chef.add_role         :elasticsearch_datanode
+    chef.add_role         :elasticsearch_httpnode
     chef.add_role         :zookeeper_server
     chef.add_role         :flume_master
     chef.add_role         :flume_agent
@@ -168,7 +168,7 @@ Vagrant::Config.run do |config|
         :server       => { :run_state => :stop  }, },
       :flume          => {
         :master       => { :run_state => :stop  },
-        :node         => { :run_state => :stop  }, },
+        :agent        => { :run_state => :stop  }, },
       :ganglia        => {
         :server       => { :run_state => :stop },
         :monitor      => { :run_state => :stop }, },
