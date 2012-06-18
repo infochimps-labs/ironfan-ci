@@ -4,11 +4,11 @@ source "http://rubygems.org"
 # Chef + Vagrant
 #
 
-gem 'chef',          "= 0.10.8"
-gem 'ironfan',       "~> 3.1.0.rc1"
-
-gem 'vagrant',    "~> 0.9.7"
-gem 'veewee',     "~> 0.2.3"
+gem 'chef',            "= 0.10.10"
+gem 'ironfan',         "~> 3.1.5"
+gem 'vagrant',         "~> 1.0"
+gem 'veewee',          "~> 0.2"
+gem 'fog',             "~> 1.3"
 
 #
 # Test drivers
@@ -47,9 +47,10 @@ end
 #
 
 group :chef_server do
-  gem 'chef-solr',         "= 0.10.8"
-  gem 'chef-server-api',   "= 0.10.8"
-  gem 'chef-server-webui', "= 0.10.8"
-  gem 'chef-expander',     "= 0.10.8"
+  gem 'chef-solr',         "= 0.10.10"
+  gem 'chef-server-api',   "= 0.10.10"
+  gem 'chef-server-webui', "= 0.10.10"
+  # fuckin'a -- find-grained gem dependencies go in the app, not the gem
+  # gem 'chef-expander',     "= 0.10.10"
   gem 'foreman'
 end
