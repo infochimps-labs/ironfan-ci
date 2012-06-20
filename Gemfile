@@ -8,7 +8,7 @@ gem 'chef',            "= 0.10.10"
 gem 'ironfan',         "~> 3.1.5"
 gem 'vagrant',         "~> 1.0"
 gem 'veewee',          "~> 0.2"
-gem 'fog',             "~> 1.3"
+gem 'fog',             "~> 1.2"
 
 #
 # Test drivers
