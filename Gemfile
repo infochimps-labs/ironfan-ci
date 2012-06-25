@@ -4,11 +4,10 @@ source "http://rubygems.org"
 # Chef + Vagrant
 #
 
-gem 'chef',            "= 0.10.10"
-gem 'ironfan',         "~> 3.1.5"
+gem 'chef',            "~> 10.12.0"
+gem 'ironfan',         "~> 3.1.6"
 gem 'vagrant',         "~> 1.0"
 gem 'veewee',          "~> 0.2"
-gem 'fog',             "~> 1.2"
 
 #
 # Test drivers
@@ -18,8 +17,9 @@ gem 'rake'
 gem 'bundler',     "~> 1"
 gem 'rspec',       "~> 2.5"
 gem 'cucumber'
-# submoduled to vendor/hedgehog/cuken
+gem 'cuken',       :path => 'vendor/hedgehog/cuken'
 # gem 'cuken',    :git => "http://github.com/infochimps/cuken.git"
+
 
 #
 # Development
